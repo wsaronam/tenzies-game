@@ -1,0 +1,41 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #22bad9;
+  padding: 15px;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #f0d7f9;
+  height: 400px;
+  max-width: 800px;
+  border-radius: 5px;
+}
+
+.dice-container {
+  display: grid;
+  grid-template-columns: 50px 50px 50px 50px 50px;
+  grid-template-rows: 50px 50px;
+  grid-auto-flow: row;
+
+  gap: 25px;
+}
+
+.die-style {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 50px;
+  width: 50px;
+  border-radius: 5px;
+  background-color: white;
+  box-shadow: 2px 2px 2px black;
+}
