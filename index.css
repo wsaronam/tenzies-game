@@ -39,3 +39,10 @@ main {
   background-color: white;
   box-shadow: 2px 2px 2px black;
 }
+
+#newDiceButton {
+  font-size: 25px;
+  background-color: bisque;
+  border-radius: 5px;
+  padding: 5;
+}
