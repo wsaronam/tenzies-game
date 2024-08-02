@@ -28,7 +28,7 @@ main {
   gap: 25px;
 }
 
-.die-style {
+.die-style-unselected {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -38,6 +38,17 @@ main {
   border-radius: 5px;
   background-color: white;
   box-shadow: 2px 2px 2px black;
+}
+
+.die-style-selected {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 50px;
+  width: 50px;
+  border-radius: 5px;
+  background-color: rgb(114, 228, 114);
 }
 
 #newDiceButton {
