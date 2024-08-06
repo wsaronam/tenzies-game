@@ -25,11 +25,28 @@ export default function App() {
     return diceArr;
   }
 
-  function rerollButton(): void {
+  function rerollButton(): any {
     /*
-    Used by the reroll button to reroll all the dice.  This will eventually not reroll user-selected dice.
+      Used by the reroll button to reroll all the dice that are not selected.
     */
-    setCurrentDice(randomizeAllDice());
+    for (let i = 0; i < currentDice.length; i++) {
+      if (!currentDice[i].selected) {
+        currentDice[i].id = nanoid();
+        currentDice[i].dieValue = Math.ceil(Math.random() * 6);;
+      }
+    }
+  }
+
+  function selectDice(dieID) {
+    /*
+      Takes the die that was selected (clicked on) and sets its selected value to the opposite of what it was.
+    */
+    for (let i = 0; i < currentDice.length; i++) {
+      if (currentDice[i].id === dieID) {
+        currentDice[i].selected = !currentDice[i].selected;
+        return;
+      }
+    }
   }
 
 
@@ -38,7 +55,7 @@ export default function App() {
   return (
     <main>
       <div className="dice-container">
-        {currentDice.map(die => <Die key={die.id} value={die} />)}
+        {currentDice.map(die => <Die key={die.id} value={die} selectDice={() => selectDice(die.id)} />)}
       </div>
 
       <button id="newDiceButton" onClick={rerollButton}>Roll new dice</button>

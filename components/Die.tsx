@@ -6,7 +6,7 @@ export default function Die(props): React.JSX.Element {
     const dieStyle: string = selected ? "die-style-selected" : "die-style-unselected"
 
     return (
-        <div className={dieStyle}>
+        <div className={dieStyle} onClick={props.selectDice}>
             <h1>{props.value.dieValue}</h1>
         </div>
     );
