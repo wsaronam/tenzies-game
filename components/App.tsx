@@ -29,24 +29,31 @@ export default function App() {
     /*
       Used by the reroll button to reroll all the dice that are not selected.
     */
-    for (let i = 0; i < currentDice.length; i++) {
-      if (!currentDice[i].selected) {
-        currentDice[i].id = nanoid();
-        currentDice[i].dieValue = Math.ceil(Math.random() * 6);;
-      }
-    }
+      setCurrentDice(oldDice => oldDice.map(die => {
+        if (!die.selected) {
+          return {
+            ...die,
+            id: nanoid(),
+            dieValue: Math.ceil(Math.random() * 6)
+          }
+        }
+        return die;
+      }))
   }
 
   function selectDice(dieID) {
     /*
       Takes the die that was selected (clicked on) and sets its selected value to the opposite of what it was.
     */
-    for (let i = 0; i < currentDice.length; i++) {
-      if (currentDice[i].id === dieID) {
-        currentDice[i].selected = !currentDice[i].selected;
-        return;
+    setCurrentDice(oldDice => oldDice.map(die => {
+      if (die.id === dieID) {
+        return {
+          ...die,
+          selected: !die.selected
+        }
       }
-    }
+      return die;
+    }))
   }
 
 
