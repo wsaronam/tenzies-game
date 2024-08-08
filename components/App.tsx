@@ -1,10 +1,29 @@
 import React from "react"
 import Die from "./Die.tsx"
+import Confetti from 'react-confetti'
 import {nanoid} from "nanoid"
 
 export default function App() {
 
   const [currentDice, setCurrentDice]: [currentDice: {id: String, dieValue: Number, selected: Boolean}[], setCurrentDice: any] = React.useState(randomizeAllDice());
+  const [wonGame, setWonGame]: [wonGame: Boolean, setWonGame: any] = React.useState(false);
+  var rollButtonText: String = wonGame ? "New Game" : "Reroll Dice";
+
+  React.useEffect(() => {
+    /*
+      Check if the game has been beaten.  This depends on 2 conditions:
+      - All die are the same value.
+      - All die have been selected.
+    */
+    const firstDieVal: Number = currentDice[0].dieValue;
+    const sameDieValues: Boolean = currentDice.every(die => die.dieValue === firstDieVal);
+    const allSelected: Boolean = currentDice.every(die => die.selected);
+
+    // If all dice are the same value and they're all selected, the player wins.
+    if (sameDieValues && allSelected) {
+      setWonGame(true);
+    }
+  }, [currentDice])
 
 
 
@@ -27,8 +46,15 @@ export default function App() {
 
   function rerollButton(): any {
     /*
-      Used by the reroll button to reroll all the dice that are not selected.
+      Used by the reroll button to start a new game if the game is won or to reroll the unselected dice if the 
+      game is still in play.
     */
+    if (wonGame) {
+      setCurrentDice(randomizeAllDice());
+      setWonGame(false);
+    }
+
+    else {
       setCurrentDice(oldDice => oldDice.map(die => {
         if (!die.selected) {
           return {
@@ -39,6 +65,7 @@ export default function App() {
         }
         return die;
       }))
+    }
   }
 
   function selectDice(dieID) {
@@ -65,7 +92,9 @@ export default function App() {
         {currentDice.map(die => <Die key={die.id} value={die} selectDice={() => selectDice(die.id)} />)}
       </div>
 
-      <button id="newDiceButton" onClick={rerollButton}>Roll new dice</button>
+      <button id="newDiceButton" onClick={rerollButton}>{rollButtonText}</button>
+
+      {wonGame && <Confetti />}
       
     </main>
   );
