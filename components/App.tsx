@@ -7,6 +7,11 @@ export default function App() {
 
   const [currentDice, setCurrentDice]: [currentDice: {id: String, dieValue: Number, selected: Boolean}[], setCurrentDice: any] = React.useState(randomizeAllDice());
   const [wonGame, setWonGame]: [wonGame: Boolean, setWonGame: any] = React.useState(false);
+  const [totalRolls, setTotalRolls]: [totalRolls: Number, setTotalRolls: any] = React.useState(0);
+  const [elapsedTime, setElapsedTime]: [elapsedTime: Number, setElapsedTime: any] = React.useState(0);
+  const [timerIsRunning, setTimerIsRunning] = React.useState(true);
+  const intervalRef = React.useRef<NodeJS.Timeout | null>(null);
+    
   var rollButtonText: String = wonGame ? "New Game" : "Reroll Dice";
 
   React.useEffect(() => {
@@ -22,8 +27,30 @@ export default function App() {
     // If all dice are the same value and they're all selected, the player wins.
     if (sameDieValues && allSelected) {
       setWonGame(true);
+      setTimerIsRunning(false);
     }
   }, [currentDice])
+
+  React.useEffect(() => {
+    /*
+    Increment seconds timer every second if the timer is not paused/stopped.
+    */
+    if (timerIsRunning) {
+      intervalRef.current = setInterval(() => {
+        setElapsedTime(prevSeconds => prevSeconds + 1);
+      }, 1000);
+    }
+    else {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [timerIsRunning]);
 
 
 
@@ -52,6 +79,9 @@ export default function App() {
     if (wonGame) {
       setCurrentDice(randomizeAllDice());
       setWonGame(false);
+      setTotalRolls(0);
+      setElapsedTime(0);
+      setTimerIsRunning(true);
     }
 
     else {
@@ -65,6 +95,7 @@ export default function App() {
         }
         return die;
       }))
+      setTotalRolls(+totalRolls + 1);
     }
   }
 
@@ -88,6 +119,9 @@ export default function App() {
 
   return (
     <main>
+      <h1>Tenzies Game</h1>
+      <h2>Rolls: {totalRolls.toString()}</h2>
+      <h2>Game Time: {elapsedTime.toString()}s</h2>
       <div className="dice-container">
         {currentDice.map(die => <Die key={die.id} value={die} selectDice={() => selectDice(die.id)} />)}
       </div>
@@ -99,4 +133,3 @@ export default function App() {
     </main>
   );
 }
-
